@@ -1,21 +1,5 @@
-from .util import get_os_seperator
 import os
-from enum import Enum
 import shutil
-
-class FileWriteResponse(Enum):
-    """File Write Response class"""
-    IS_FILE = {'message': 'This is a file', 'value': False}
-    IS_DIRECTORY = {'message': 'This is a directory', 'value': False}
-    
-    FILE_SUCCESS = {'message': 'File Write Success', 'value': True}
-    FILE_OVERWRITE = {'message': 'File Overwritten', 'value': True}
-    FILE_EXISTS = {'message': 'File Already Exists', 'value': False}
-
-    DIR_BASE = {'message': 'Base Directory Cannot Overwrite', 'value': False}
-    DIR_SUCCESS = {'message': 'Directory Write Success', 'value': True}
-    DIR_OVERWRITE = {'message': 'Directory Overwritten', 'value': True}
-    DIR_EXISTS = {'message': 'Directory Already Exists', 'value': False}
 
 class TileFileWriter:
     """ """
@@ -30,7 +14,7 @@ class TileFileWriter:
         return os.path.join(*cls.DIR)
 
     @classmethod
-    def is_base_directory(cls, dir_path):
+    def is_base_directory(cls, dir_path: str):
         """Function to get the base directory path string
         Args:
             dir_path: directory path to check against
@@ -40,7 +24,7 @@ class TileFileWriter:
         return dir_path == cls.get_base_path()
 
     @classmethod
-    def create_directory(cls, *args, overwriteOnExists=False):
+    def create_directory(cls, *args: any, overwriteOnExists=False):
         """Create a directory for the tiles or subdirectory to go in
         
         Args:
@@ -80,7 +64,7 @@ class TileFileWriter:
         return _return
 
     @classmethod
-    def remove_directory(cls, *args, dir_path=None):
+    def remove_directory(cls, *args: any, dir_path=None):
         """Remove a directory function
         
         Args:
@@ -89,7 +73,11 @@ class TileFileWriter:
         Returns:
             boolean if operation was a success
         """
-        _path = dir_path if dir_path else os.path.join(cls.get_base_path(), *args)
+        if dir_path:
+            _path = os.path.join(cls.get_base_path(), dir_path)
+        else:
+            _path = os.path.join(cls.get_base_path(), *args)
+
         # Check valid path
         if os.path.exists(_path):
             if os.path.isdir(_path):
@@ -117,7 +105,7 @@ class TileFileWriter:
         return _return
 
     @classmethod
-    def create_file(cls, filepath, filename, content):
+    def create_file(cls, filepath: str, content: any, overwriteOnExists=False):
         """Create a file function
         
         Args:
@@ -125,10 +113,17 @@ class TileFileWriter:
         Returns:
             boolean if operation was a success
         """
-        pass
+        _path = os.path.join(cls.get_base_path(), filepath)
+        # Check valid path
+        if os.path.exists(_path):
+            pass
+        new_file = open(_path, 'w')
+        new_file.write(content)
+        new_file.close()
+        return True
 
     @classmethod
-    def remove_file(cls, filepath):
+    def remove_file(cls, filepath: str):
         """Remove a file function
         
         Args:
