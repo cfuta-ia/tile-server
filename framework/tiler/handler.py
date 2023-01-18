@@ -7,28 +7,29 @@ from framework.util.tablify import printTable
 
 class ImageTiler:
     """Image Tiler Class"""
-    COORDINATES = {'name': 'WGS 84', 'bounds': {'latitude': (-180, 180), 'longitude': (-85, 85)}}
-    def __init__(self, imagePath: str, minZoom=0, maxZoom=18, reshapeTileSize=True, coordinateSystem={}):
+    def __init__(self, imagePath: str, directory: str, minZoom=0, maxZoom=18, reshapeTileSize=True, coordinateSystem={}):
         self.tiles = (256.0, 256.0)
         self.zoom = (minZoom, maxZoom)
         self.coordinates = CoordinateSystem(datum=coordinateSystem)
 
         # Initialization Function Calls
-        self.setImage(imagePath)
-        self.reshapeTileSize(reshapeTileSize)
+        self.setImage(imagePath, directory)
+        self.setTileSize(reshapeTileSize)
+        
 
     def splitImage(self):
         """Split Image Function"""
         pass
 
     # Setter Methods
-    def setImage(self, imagePath):
+    def setImage(self, imagePath, directory):
         """Convert image data in numpy array and set as the data property in the class image dict"""
         self.image = {'path': imagePath, 'image': Image.open(imagePath),}
         self.image['data'] = np.asarray(self.image.get('image'), [])
+        self.image['directory'] = directory
         return None
 
-    def reshapeTileSize(self, reshapeTileSize):
+    def setTileSize(self, reshapeTileSize):
         """Set the default tile size for the image"""
         if reshapeTileSize:
             self.tiles = (256.0, (self.getImageScale()*256).__float__())

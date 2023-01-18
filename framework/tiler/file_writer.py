@@ -1,11 +1,11 @@
 import os
 import shutil
 
-class TilerFileWriter:
+class Writer:
     """ """
     DIR = ('.', 'tiles')
     @classmethod
-    def get_base_path(cls):
+    def getBasePath(cls):
         """Get the base path of the Tile File Writer
         
         Returns:
@@ -14,17 +14,17 @@ class TilerFileWriter:
         return os.path.join(*cls.DIR)
 
     @classmethod
-    def is_base_directory(cls, dir_path: str):
+    def isBaseDirectory(cls, dir_path: str):
         """Function to get the base directory path string
         Args:
             dir_path: directory path to check against
         Returns:
             True/False
         """
-        return dir_path == cls.get_base_path()
+        return dir_path == cls.getBasePath()
 
     @classmethod
-    def create_directory(cls, *args: any, overwriteOnExists=False):
+    def createDirectory(cls, *args: any, overwriteOnExists=False):
         """Create a directory for the tiles or subdirectory to go in
         
         Args:
@@ -33,7 +33,7 @@ class TilerFileWriter:
         Returns:
             boolean if operation was a success
         """
-        dir_path = os.path.join(cls.get_base_path(), *args)
+        dir_path = os.path.join(cls.getBasePath(), *args)
         # Check Input Path
         if os.path.exists(dir_path):
             if os.path.isfile(dir_path):
@@ -41,7 +41,7 @@ class TilerFileWriter:
                 print(f"Path leads to a file. ({dir_path})")
                 _return = False
             elif overwriteOnExists:
-                if cls.is_base_directory(dir_path):
+                if cls.isBaseDirectory(dir_path):
                     # Path Leads to Base Directory
                     print(f"Path is the base directory and cannot be overwritten. ({dir_path})")
                     _return = False
@@ -64,7 +64,7 @@ class TilerFileWriter:
         return _return
 
     @classmethod
-    def remove_directory(cls, *args: any, dir_path=None):
+    def removeDirectory(cls, *args: any, dir_path=None):
         """Remove a directory function
         
         Args:
@@ -74,15 +74,15 @@ class TilerFileWriter:
             boolean if operation was a success
         """
         if dir_path:
-            _path = os.path.join(cls.get_base_path(), dir_path)
+            _path = os.path.join(cls.getBasePath(), dir_path)
         else:
-            _path = os.path.join(cls.get_base_path(), *args)
+            _path = os.path.join(cls.getBasePath(), *args)
 
         # Check valid path
         if os.path.exists(_path):
             if os.path.isdir(_path):
                 # Path is a directory
-                if cls.is_base_directory(_path):
+                if cls.isBaseDirectory(_path):
                     # Path Leads to Base Directory
                     print(f"Path is the base directory and cannot be removed. ({_path})")
                     _return = False
@@ -105,25 +105,7 @@ class TilerFileWriter:
         return _return
 
     @classmethod
-    def create_file(cls, filepath: str, content: any, overwriteOnExists=False):
-        """Create a file function
-        
-        Args:
-            filepath: path to the file inside of the tiles directory
-        Returns:
-            boolean if operation was a success
-        """
-        _path = os.path.join(cls.get_base_path(), filepath)
-        # Check valid path
-        if os.path.exists(_path):
-            pass
-        new_file = open(_path, 'w')
-        new_file.write(content)
-        new_file.close()
-        return True
-
-    @classmethod
-    def remove_file(cls, filepath: str):
+    def removeFile(cls, filepath: str):
         """Remove a file function
         
         Args:
@@ -131,7 +113,7 @@ class TilerFileWriter:
         Returns:
             boolean if operation was a success
         """
-        _path = os.path.join(cls.get_base_path(), filepath)
+        _path = os.path.join(cls.getBasePath(), filepath)
         # Check valid path
         if os.path.exists(_path):
             if os.path.isdir(_path):
