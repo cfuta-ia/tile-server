@@ -4,8 +4,9 @@ from PIL import Image
 from fractions import Fraction
 from framework.tiler.file_writer import Writer
 
-class TileImager:
+class TileImage:
     """Tile Image class to be used by the imiage tiler"""
+    _tileSize = (256.0, 256.0)
     def __init__(self, imagePath, directory):
         self.path = imagePath
         self.directory = self.makeValidDirectory(directory)

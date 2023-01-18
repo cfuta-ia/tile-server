@@ -5,6 +5,13 @@ from framework.tiler.splitter import ImageSplitter
 from framework.tiler.projection import CoordinateSystem
 from framework.util.tablify import printTable
 
+class TileServer:
+    """Tile server image splitter"""
+    def __init__(self):
+        pass
+
+    
+
 class ImageTiler:
     """Image Tiler Class"""
     def __init__(self, imagePath: str, directory: str, minZoom=0, maxZoom=18, reshapeTileSize=True, coordinateSystem={}):
