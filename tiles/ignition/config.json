@@ -1,0 +1,14 @@
+{
+    "image": {
+        "imagePath": "/Users/cfuta/Desktop/TileServer/tile-server/Ignition Map.png",
+        "maintainAspectRatio": true
+    },
+    "projection": {
+        "datum": "default"
+    },
+    "server": {
+        "directory": "ignition",
+        "minZoom": 1,
+        "maxZoom": 1
+    }
+}

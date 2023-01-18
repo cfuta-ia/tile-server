@@ -134,3 +134,14 @@ class Writer:
             print(f"Path is not valid. ({_path})")
             _return = False
         return _return
+
+    @classmethod
+    def createFile(cls, content, *args, file_path=None):
+        """Create File"""
+        if file_path:
+            _path = os.path.join(cls.getBasePath(), file_path)
+        else:
+            _path = os.path.join(cls.getBasePath(), *args)
+        with open(_path, 'w') as f:
+            f.write(content)
+        return None
