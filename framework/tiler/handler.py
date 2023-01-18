@@ -3,14 +3,18 @@ import numpy as np
 from fractions import Fraction
 from framework.tiler.splitter import ImageSplitter
 from framework.tiler.projection import CoordinateSystem
+from framework.tiler.img import TileImage
 from framework.util.tablify import printTable
+from typing import Type
 
 class TileServer:
     """Tile server image splitter"""
-    def __init__(self):
-        pass
+    def __init__(self, image: dict, projection: dict, server: dict):
+        self.config = {'image': image, 'projecttion': projection, 'server': server}
+        self.tile_image = TileImage(**image)
+        self.coordinate_system = CoordinateSystem(**projection)
 
-    
+
 
 class ImageTiler:
     """Image Tiler Class"""

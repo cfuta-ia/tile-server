@@ -2,13 +2,13 @@ from framework.util.tablify import printTable
 
 class CoordinateSystem:
     """Image Coordinate Projection Class"""
-    _defaultDatum = {'name': 'WGS-84', 'bounds': {'latitude': (-180.0, 180.0), 'longitude': (-85.05, 85.05)}}
-    def __init__(self, datum=None, includeDefinition=True):
+    _DATUMS = {'default': {'name': 'WGS-84', 'bounds': {'latitude': (-180.0, 180.0), 'longitude': (-85.05, 85.05)}}}
+    def __init__(self, datum='default'):
         self.setDatum(datum)
-        if includeDefinition:
-            self.coordinateDefinition()
 
-    def coordinateDefinition(self):
+    # Property
+    @property
+    def definition(self):
         """Print out the coordinate system definition"""
         printTable(['Name', 'Min Latitude', 'Max Latitude', 'Min Longitude', 'Max Longitude']
             , [[self.name, self.bounds.get('latitude')[0], self.bounds.get('latitude')[1], self.bounds.get('longitude')[0], self.bounds.get('longitude')[1]]]
@@ -24,7 +24,7 @@ class CoordinateSystem:
         Returns:
             None
         """
-        datum = datum if all([datum.get('name', False), datum.get('bounds', False)]) else self._defaultDatum
+        datum = self._DATUMS.get(datum)
         self.name = datum.get('name', 'Unknown')
         self.bounds = datum.get('bounds', {'latitude': (0.0, 0.0), 'longitude': (0.0, 0.0)})
         return None
