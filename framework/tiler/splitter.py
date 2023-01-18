@@ -3,11 +3,13 @@ import numpy as np
 
 class ImageSplitter:
     """Image Spliiter Class for splitting an image into tiles"""
-    def __init__(self, image: dict, zoom):
+    def __init__(self, image: dict, zoom: int, tileSize: tuple):
         self.image = image
         self.zoom = zoom
-        self.setTileQuantity()
-        self.setGridSize()
+        self.tileSize = tileSize
+
+        # Class Function Calls
+        self.generateXYGrid()
 
     def getPixelCoordinateMap(self, zoom, tileSize):
         """Return the upper & lower pixel bounds based on the image and zoom
@@ -30,45 +32,44 @@ class ImageSplitter:
 
     def generateXYGrid(self):
         """Generate tile XY grid"""
-        return np.array([[f"({x},{y})" for x in range(self.grid_size)] for y in range(self.grid_size)])
+        self.gridXY = np.array([[(x,y) for x in range(self.gridSize)] for y in range(self.gridSize)])
+        return None
 
     def split(self):
         """Split the input image method"""
         image_data = np.asarray(self.image)
 
-    def quadKey(self, x, y):
+    def quadKey(self, tileX, tileY):
         """Generate a single quad key from x,y coordinate
         Args:
-            x: tile X
-            y: tile Y
+            tileX: tile X
+            tileY: tile Y
         Returns:
             quad key in the form of a string
         """
+        # Convert tileX & tileY to binary
+        toBin = lambda v: bin(v)[2:].zfill(self.zoom)
+        tx, ty = toBin(tileX), toBin(tileY)
         qk = []
-        for i in reversed(range(1, self.zoom + 1)):
-            key_mask = 1 << (i - 1)
+        for idx, lvl in enumerate(reversed(range(1, self.zoom + 1))):
+            key_mask = 1 << (lvl - 1)
             tmp_key = 0
             if key_mask != 0:
-                if x != 0:
+                if tx[idx] != '0':
                     tmp_key += 1
-                if y != 0:
+                if ty[idx] != '0':
                     tmp_key += 2
             qk.append(str(tmp_key))
-        print(f"X: {x}, Y: {y}, QK: {qk}")
         return ''.join(qk)
     
     # Property Methods
     @property
-    def imageSize(self):
-        """Image Size Property"""
-        return self.image_data.shape
+    def gridSize(self):
+        """Get the size of the grid in XY"""
+        return int(2**self.zoom)
 
-    # Setter Methods
-    def setTileQuantity(self):
-        """Set the total number of tiles the image splitter should create"""
-        self.tile_quantity = (4**self.zoom)
-
-    def setGridSize(self):
-        """Set the grid size as a singular value"""
-        self.grid_size = int(2**self.zoom)
+    @property
+    def nTiles(self):
+        """Get the total number of tiles for this zoom level"""
+        return int(self.gridSize**2)
     

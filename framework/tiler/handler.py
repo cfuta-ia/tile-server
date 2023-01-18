@@ -17,6 +17,10 @@ class ImageTiler:
         self.setImage(imagePath)
         self.reshapeTileSize(reshapeTileSize)
 
+    def splitImage(self):
+        """Split Image Function"""
+        pass
+
     # Setter Methods
     def setImage(self, imagePath):
         """Convert image data in numpy array and set as the data property in the class image dict"""
@@ -38,8 +42,8 @@ class ImageTiler:
     def getImageDescription(self):
         """Get the image dimensions for the class image path"""
         dimensions = self.__imageDimensions()
-        headers = ['Height (px)', 'Width (px)', 'Scale']
-        data = [[dimensions[0], dimensions[1], '{:.2f}'.format(self.getImageScale().__float__())]]
+        headers = ['Height (px)', 'Width (px)', 'Scale', 'Tile Size']
+        data = [[dimensions[0], dimensions[1], '{:.2f}'.format(self.getImageScale().__float__()), "{:.0f}x{:.0f}".format(*self.tiles)]]
         printTable(headers, data, includeStatement=False)
         return None
 

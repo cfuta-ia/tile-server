@@ -1,72 +1,51 @@
-from framework.util.tablify import printTable
+class MapBounds:
+    """ """
+    def __init__(self):
+        self.grid = [(None, None), (None, None)]
 
-class CoordinateSystem:
-    """Image Coordinate Projection Class"""
-    _defaultDatum = {'name': 'WGS-84', 'bounds': {'latitude': (-180.0, 180.0), 'longitude': (-85.05, 85.05)}}
-    def __init__(self, datum=None, includeDefinition=True):
-        self.setDatum(datum)
-        if includeDefinition:
-            self.coordinateDefinition()
+    @property
+    def lowerBounds(self):
+        """Get the lower bound from the grid property"""
+        return self.grid[0]
 
-    def coordinateDefinition(self):
-        """Print out the coordinate system definition"""
-        printTable(['Name', 'Min Latitude', 'Max Latitude', 'Min Longitude', 'Max Longitude']
-            , [[self.name, self.bounds.get('latitude')[0], self.bounds.get('latitude')[1], self.bounds.get('longitude')[0], self.bounds.get('longitude')[1]]]
-            , includeStatement=False)
-        return None
+    @property
+    def upperBounds(self):
+        """Get the lower bound from the grid property"""
+        return self.grid[1]
 
-    # Setter Methods
-    def setDatum(self, datum):
-        """Set the coordinate system project datum
+    def getLowerBound(self, pos):
+        """Get the x/y bound from the lower bounds
         
         Args:
-            datum: datum dict to project onto the image, if None uses the _default class property
+            pos: x/y bound
         Returns:
-            None
+            bound value
         """
-        datum = datum if all([datum.get('name', False), datum.get('bounds', False)]) else self._defaultDatum
-        self.name = datum.get('name', 'Unknown')
-        self.bounds = datum.get('bounds', {'latitude': (0.0, 0.0), 'longitude': (0.0, 0.0)})
-        return None
-
-    # Getter Methods
-    def getBounds(self, dir='all'):
-        """Get the coordinate system datum bounds
-        
-        Args:
-            dir: bound direction to get (latitude, longitude, all)
-        Returns:
-            dict of the datum bounds
-        """
-        dir = dir.lower()
-        match dir:
-            case 'all':
-                bound = self.bounds
-            case 'latitude' | 'longitude':
-                bound = self.bounds.get(dir)
+        match pos.lower():
+            case 'x':
+                value = self.lowerBounds[0]
+            case 'y':
+                value = self.lowerBounds[1]
             case _:
-                bound = {}
-        return bound
+                value = -1
+        return  value
 
-    # Properties 
-    @property
-    def minLongitude(self):
-        """Minimum longitude bound"""
-        return self.bounds.get('longitude')[0]
+    def getUpperBound(self, pos):
+        """Get the x/y bound from the upper bounds
+        
+        Args:
+            pos: x/y bound
+        Returns:
+            bound value
+        """
+        match pos.lower():
+            case 'x':
+                value = self.upperBounds[0]
+            case 'y':
+                value = self.upperBounds[1]
+            case _:
+                value = -1
+        return  value
 
-    @property
-    def maxLongitude(self):
-        """Maximum longitude bound"""
-        return self.bounds.get('longitude')[1]
-
-    @property
-    def minLatitude(self):
-        """Minimum latitude bound"""
-        return self.bounds.get('latitude')[0]
-
-    @property
-    def maxLatitude(self):
-        """Minimum latitude bound"""
-        return self.bounds.get('latitude')[1]
 
     
